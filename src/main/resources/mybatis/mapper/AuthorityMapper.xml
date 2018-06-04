@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.dzlin.oauth2.mapper.AuthorityMapper">
+
+    <sql id="baseColumns">
+        id, name
+    </sql>
+
+    <select id="findByUserId" parameterType="Long" resultType="Authority">
+        select a.id, a.name
+        from user_authority ua
+        left join authority a on a.id = ua.authority_id
+        where ua.user_id = #{userId}
+        order by a.name asc
+    </select>
+
+    <insert id="add" parameterType="Authority" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into authority (name) values (#{name})
+    </insert>
+
+    <select id="findByName" parameterType="String" resultType="Authority">
+        select
+        <include refid="baseColumns"/>
+        from authority
+        where name = #{name}
+    </select>
+
+    <select id="findByIds" parameterType="ArrayList" resultType="Authority">
+        select
+        <include refid="baseColumns"/>
+        from authority
+        where id in
+        <foreach item="id" collection="list" index="index"
+                 open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

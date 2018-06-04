@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.dzlin.oauth2.mapper.OauthClientDetailsMapper">
+
+    <sql id="baseColumns">
+        client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri,
+        authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove
+    </sql>
+
+    <resultMap id="clientMap" type="OauthClientDetailsEntity">
+        <result column="client_id" property="clientId"/>
+        <result column="resource_ids" property="resourceIds"/>
+        <result column="client_secret" property="clientSecret"/>
+        <result column="authorized_grant_types" property="authorizedGrantTypes"/>
+        <result column="web_server_redirect_uri" property="webServerRedirectUri"/>
+        <result column="access_token_validity" property="accessTokenValidity"/>
+        <result column="refresh_token_validity" property="refreshTokenValidity"/>
+        <result column="additional_information" property="additionalInformation"/>
+        <result column="autoapprove" property="autoApprove"/>
+    </resultMap>
+
+    <select id="findByClientId" parameterType="String" resultMap="clientMap">
+        select
+        <include refid="baseColumns"/>
+        from oauth_client_details
+        where client_id = #{clientId}
+    </select>
+
+    <insert id="add" parameterType="OauthClientDetailsEntity">
+        insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types,
+        web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information,
+        autoapprove)
+        values(#{clientId}, #{resourceIds}, #{clientSecret}, #{scope}, #{authorizedGrantTypes}, #{webServerRedirectUri},
+        #{authorities}, #{accessTokenValidity}, #{refreshTokenValidity}, #{additionalInformation}, #{autoApprove})
+    </insert>
+</mapper>
